@@ -1,0 +1,38 @@
+Wekelijks rapport
+
+Student(e):                                                       
+
+Overzicht activiteiten
+
+Week 5 (20/10): Project opgestart. Gradle-dependencies (Compose, Room, Coroutines) toegevoegd. De Data-laag gedefinieerd: Recipe Entiteit, RecipeDao (DAO Interface), en de basis RecipeDatabase opgezet. Dit vormt de database-basis. uren: 2,45
+
+
+
+Week 6 (03/11): De Model-View-ViewModel (MVVM) architectuur verder geïmplementeerd. De RecipeRepository gemaakt om de DAO aan te spreken. De RecipeViewModel opgezet inclusief Factory om de Repository te injecteren. Basis CRUD-functies (Create en Read All via Flow) in de ViewModel geïmplementeerd. uren: 3
+
+
+
+Week 7 (10/11): ..... uren:
+
+
+
+Week 8 (17/11): ..... uren:
+
+
+
+Week 9 (24/11): ..... uren:
+
+
+
+Week 10 (01/12): ..... uren:
+
+
+
+Week 11 (08/12): ..... uren:
+
+
+
+Week 12 en volgende weken (15/12): ..... uren:
+
+
+
