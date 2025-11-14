@@ -12,7 +12,7 @@ Week 6 (03/11): De Model-View-ViewModel (MVVM) architectuur verder geïmplemente
 
 
 
-Week 7 (10/11): ..... uren:
+Week 7 (14/11): De UI-laag gestart. Navigatie geconfigureerd in MainActivity.kt en routes in screens/Destinations.kt. De hoofdweergave RecipeListScreen.kt gemaakt om alle recepten vanuit de ViewModel te observeren (collectAsState) en in een lijst te tonen. uren:
 
 
 
