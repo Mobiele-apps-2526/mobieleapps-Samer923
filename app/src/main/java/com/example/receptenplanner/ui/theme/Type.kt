@@ -1,4 +1,4 @@
-package com.example.receptenplanner.ui.theme
+package com.example.voorbeeld.receptenplanner.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

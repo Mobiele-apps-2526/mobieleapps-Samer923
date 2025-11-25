@@ -41,7 +41,7 @@ fun RecipeDetailScreen(
 ) {
 
     val recipeFlow = remember(recipeId) { viewModel.getRecipe(recipeId) }
-    // initial = null omdat de database even kan duren
+
     val recipe by recipeFlow.collectAsState(initial = null)
 
 
@@ -77,7 +77,7 @@ fun RecipeDetailScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-
+                        // FIX VOOR VERWIJDEREN: Gebruik het geobserveerde 'recipe' object
                         viewModel.deleteRecipe(recipe!!)
                         navController.popBackStack()
                     }) {

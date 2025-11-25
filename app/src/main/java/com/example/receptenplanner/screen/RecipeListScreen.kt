@@ -1,6 +1,5 @@
 package com.example.receptenplanner.screen
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +29,6 @@ fun RecipeListScreen(navController: NavController, viewModel: RecipeViewModel) {
             }
         }
     ) { paddingValues ->
-
         RecipeList(
             recipeList = recipeListUiState.recipeList,
             modifier = Modifier.padding(paddingValues),
@@ -70,7 +68,7 @@ fun RecipeListItem(recipe: Recipe, onClick: () -> Unit) {
         Column(modifier = Modifier.weight(1f)) {
             Text(text = recipe.title, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(4.dp))
-
+            // Toon een stukje van de ingrediënten
             Text(text = "Ingrediënten: ${recipe.ingredients.take(50)}...", style = MaterialTheme.typography.bodySmall)
         }
     }
