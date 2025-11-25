@@ -20,7 +20,7 @@ Week 8 (17/11): De gedetailleerde weergave RecipeDetailScreen.kt geïmplementeer
 
 
 
-Week 9 (24/11): ..... uren:
+Week 9 (24/11): De minimale scope volledig afgerond. De laatste CRUD-functie (DELETE)  uren: 4:30
 
 
 
