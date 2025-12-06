@@ -24,7 +24,7 @@ Week 9 (24/11): De minimale scope volledig afgerond. De laatste CRUD-functie (DE
 
 
 
-Week 10 (01/12): ..... uren:
+Week 10 (01/12): De logische verbinding voor de zoekfunctie opgezet. Zoek-query toegevoegd aan de RecipeDao. De RecipeRepository hernoemd naar RecipeRepositoryImpl en de Interface RecipeRepository gemaakt ter voorbereiding op Hilt. uren: 4
 
 
 
