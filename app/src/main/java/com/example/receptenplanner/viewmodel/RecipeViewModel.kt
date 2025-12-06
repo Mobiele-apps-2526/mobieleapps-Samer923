@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewModelScope
 import com.example.receptenplanner.data.Recipe
-import com.example.receptenplanner.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted;
 import kotlinx.coroutines.flow.StateFlow;
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn;
 import kotlinx.coroutines.launch
 data class RecipeListUiState(val recipeList: List<Recipe> = listOf())
-class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
+class RecipeViewModel(private val repository: `RecipeRepository`) : ViewModel() {
     val recipeListUiState: StateFlow<RecipeListUiState> =
         repository.allRecipes.map { RecipeListUiState(it) }.stateIn(
             scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = RecipeListUiState()
@@ -29,7 +28,7 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
     }
     fun getRecipe(id: Int): Flow<Recipe> { return repository.getRecipe(id) }
     companion object {
-        fun provideFactory(repository: RecipeRepository): ViewModelProvider.Factory {
+        fun provideFactory(repository: `RecipeRepository`): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {

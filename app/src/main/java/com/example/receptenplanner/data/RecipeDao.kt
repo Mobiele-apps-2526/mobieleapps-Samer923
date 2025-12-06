@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDao {
+    @Query("SELECT * FROM recipe WHERE title LIKE '%' || :query || '%' OR ingredients LIKE '%' || :query || '%' ORDER BY title ASC")
+    fun searchRecipes(query: String): Flow<List<Recipe>>
+
+    @Query("SELECT * FROM recipe WHERE id = :id")
+    suspend fun getRecipeById(id: Int): Recipe?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(recipe: Recipe)

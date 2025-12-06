@@ -19,7 +19,6 @@ import com.example.receptenplanner.screen.Destinations
 import com.example.receptenplanner.screen.RecipeDetailScreen
 import com.example.receptenplanner.screen.RecipeListScreen
 import com.example.receptenplanner.data.RecipeDatabase
-import com.example.receptenplanner.repository.RecipeRepository
 import com.example.receptenplanner.viewmodel.RecipeViewModel
 import com.example.receptenplanner.ui.theme.ReceptenplannerTheme
 
