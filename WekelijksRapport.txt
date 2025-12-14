@@ -28,7 +28,8 @@ Week 10 (01/12): De logische verbinding voor de zoekfunctie opgezet. Zoek-query 
 
 
 
-Week 11 (08/12): ..... uren:
+Week 11 (08/12): De zoeklogica geïmplementeerd in de RecipeViewModel met StateFlow en flatMapLatest uren: 3:45
+
 
 
 
