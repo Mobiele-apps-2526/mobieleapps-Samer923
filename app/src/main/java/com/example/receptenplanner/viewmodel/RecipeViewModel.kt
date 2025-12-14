@@ -1,41 +1,93 @@
 package com.example.receptenplanner.viewmodel
 
 
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.receptenplanner.data.Recipe
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted;
-import kotlinx.coroutines.flow.StateFlow;
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn;
+import com.example.receptenplanner.repository.RecipeRepository
+import com.example.receptenplanner.repository.ShoppingListRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-data class RecipeListUiState(val recipeList: List<Recipe> = listOf())
-class RecipeViewModel(private val repository: `RecipeRepository`) : ViewModel() {
-    val recipeListUiState: StateFlow<RecipeListUiState> =
-        repository.allRecipes.map { RecipeListUiState(it) }.stateIn(
-            scope = viewModelScope, started = SharingStarted.WhileSubscribed(5_000), initialValue = RecipeListUiState()
-        )
-    fun insertRecipe(title: String, ingredients: String, instructions: String) {
-        val recipe = Recipe(title = title, ingredients = ingredients, instructions = instructions)
-        viewModelScope.launch { repository.insertRecipe(recipe) }
-    }
-    fun deleteRecipe(recipe: Recipe) { viewModelScope.launch { repository.deleteRecipe(recipe) } }
-    fun updateRecipe(id: Int, title: String, ingredients: String, instructions: String) {
-        val recipe = Recipe(id = id, title = title, ingredients = ingredients, instructions = instructions)
-        viewModelScope.launch { repository.updateRecipe(recipe) }
-    }
-    fun getRecipe(id: Int): Flow<Recipe> { return repository.getRecipe(id) }
-    companion object {
-        fun provideFactory(repository: `RecipeRepository`): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass.isAssignableFrom(RecipeViewModel::class.java)) { return RecipeViewModel(repository) as T }
-                    throw IllegalArgumentException("Unknown ViewModel class")
+import javax.inject.Inject
+
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
+    private val recipeRepository: RecipeRepository,
+
+    private val shoppingListRepository: ShoppingListRepository
+) : ViewModel() {
+
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
+
+    private val _recipes = recipeRepository.getAllRecipes()
+
+    val filteredRecipes: StateFlow<List<Recipe>> = _recipes
+        .combine(searchQuery) { recipes, query ->
+            if (query.isBlank()) {
+                recipes
+            } else {
+                recipes.filter {
+                    it.title.contains(query, ignoreCase = true)
                 }
             }
-        }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun onSearchQueryChange(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun saveRecipe(recipe: Recipe) = viewModelScope.launch {
+        recipeRepository.insertRecipe(recipe)
+    }
+
+    fun updateRecipe(id: Int, title: String, ingredientsText: String, instructions: String) = viewModelScope.launch {
+        val ingredientsList = ingredientsText.split('\n')
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+
+        val updatedRecipe = Recipe(
+            id = id,
+            title = title,
+            ingredients = ingredientsList,
+            instructions = instructions
+        )
+        recipeRepository.updateRecipe(updatedRecipe)
+    }
+
+    fun deleteRecipe(recipe: Recipe) = viewModelScope.launch {
+        recipeRepository.deleteRecipe(recipe)
+    }
+
+    fun getRecipe(id: Int): Flow<Recipe?> {
+        return recipeRepository.getRecipe(id)
+    }
+
+    fun addRecipeIngredientsToShoppingList(ingredients: List<String>) = viewModelScope.launch {
+        shoppingListRepository.insertItemsFromRecipe(ingredients)
+    }
+
+    val shoppingListItems = shoppingListRepository.getAllItems()
+
+    fun insertShoppingListItem(name: String) = viewModelScope.launch {
+        shoppingListRepository.insertItem(name)
+    }
+
+    fun updateShoppingListItem(item: com.example.receptenplanner.data.ShoppingListItem) = viewModelScope.launch {
+        shoppingListRepository.updateItem(item)
+    }
+
+    fun deleteShoppingListItem(item: com.example.receptenplanner.data.ShoppingListItem) = viewModelScope.launch {
+        shoppingListRepository.deleteItem(item)
+    }
+
+    fun clearShoppingList() = viewModelScope.launch {
+        shoppingListRepository.clearList()
     }
 }

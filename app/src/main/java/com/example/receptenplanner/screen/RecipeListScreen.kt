@@ -15,46 +15,52 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.receptenplanner.data.Recipe
 import com.example.receptenplanner.viewmodel.RecipeViewModel
+import androidx.compose.material.icons.filled.Search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeListScreen(navController: NavController, viewModel: RecipeViewModel) {
-    val recipeListUiState by viewModel.recipeListUiState.collectAsState()
+
+fun RecipeListScreen(viewModel: RecipeViewModel, onNavigateToDetail: (Int) -> Unit) {
+
+    val recipes by viewModel.filteredRecipes.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Mijn Recepten") }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(Destinations.ADD_RECIPE_ROUTE) }) {
-                Icon(Icons.Filled.Add, contentDescription = "Recept toevoegen")
+            FloatingActionButton(onClick = { onNavigateToDetail(-1) }) { // Gebruik de callback
+                Icon(Icons.Filled.Add, contentDescription = "Nieuw Recept")
             }
         }
     ) { paddingValues ->
-        RecipeList(
-            recipeList = recipeListUiState.recipeList,
-            modifier = Modifier.padding(paddingValues),
-            onItemClick = { recipeId ->
-                navController.navigate("${Destinations.RECIPE_DETAIL_ROUTE}/$recipeId")
-            }
-        )
-    }
-}
+        // Gebruik Column om de zoekbalk boven de LazyColumn te plaatsen
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            // De Zoekbalk
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { viewModel.onSearchQueryChange(it) },
+                label = { Text("Zoek recepten op titel/ingrediënt...") },
+                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Zoeken") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
 
-@Composable
-fun RecipeList(
-    recipeList: List<Recipe>,
-    modifier: Modifier = Modifier,
-    onItemClick: (Int) -> Unit
-) {
-    LazyColumn(modifier = modifier) {
-        items(items = recipeList, key = { it.id }) { recipe ->
-
-            RecipeListItem(recipe = recipe, onClick = { onItemClick(recipe.id) })
+            RecipeList(
+                recipeList = recipes,
+                modifier = Modifier.weight(1f),
+                onItemClick = onNavigateToDetail
+            )
         }
     }
-    if (recipeList.isEmpty()) {
-        Text(text = "Geen recepten gevonden. Voeg er een toe!", modifier = Modifier.padding(16.dp))
-    }
 }
+
+
 
 
 @Composable
