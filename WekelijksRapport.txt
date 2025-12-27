@@ -33,7 +33,10 @@ Week 11 (08/12): De zoeklogica geïmplementeerd in de RecipeViewModel met StateF
 
 
 
-Week 12 en volgende weken (15/12): ..... uren:
+Week 12 :De data-laag voor de boodschappenlijst opgezet: nieuwe map db, ShoppingListItem Entity, ShoppingListDao. De Recipe Entity is aangepast naar List<String>. De Converters (met Gson) geïmplementeerd en geregistreerd in RecipeDatabase : uren: 4,30
+
+
+en volgende weken (15/12): ..... uren:
 
 
 
