@@ -1,6 +1,8 @@
 package com.example.receptenplanner.viewmodel
 
 
+
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.receptenplanner.data.Recipe
@@ -14,10 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
-
     private val shoppingListRepository: ShoppingListRepository
 ) : ViewModel() {
-
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery

@@ -3,71 +3,131 @@ package com.example.receptenplanner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.receptenplanner.screen.AddRecipeScreen
-import com.example.receptenplanner.screen.Destinations
-import com.example.receptenplanner.screen.RecipeDetailScreen
-import com.example.receptenplanner.screen.RecipeListScreen
-import com.example.receptenplanner.data.RecipeDatabase
-import com.example.receptenplanner.viewmodel.RecipeViewModel
+import com.example.receptenplanner.screen.ShoppingListScreen
+import com.example.receptenplanner.screen.recipes.RecipeDetailScreen
+import com.example.receptenplanner.screen.recipes.RecipeListScreen
 import com.example.receptenplanner.ui.theme.ReceptenplannerTheme
+import com.example.receptenplanner.viewmodel.RecipeViewModel
+import dagger.hilt.android.AndroidEntryPoint
+
+
+sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
+    object Recipes : Screen("recipes", "Recepten", Icons.Filled.MenuBook)
+    object ShoppingList : Screen("shoppinglist", "Boodschappen", Icons.Filled.List)
+    object Detail : Screen("detail/{recipeId}", "Detail", Icons.Filled.MenuBook) {
+        fun createRoute(recipeId: Int) = "detail/$recipeId"
+    }
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        val database = RecipeDatabase.getDatabase(applicationContext)
-        val repository = RecipeRepository(database.recipeDao())
-        val viewModelFactory = RecipeViewModel.provideFactory(repository)
-
         setContent {
             ReceptenplannerTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-
-                    RecipeAppNavigation(viewModelFactory)
-                }
+                MainScreen()
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeAppNavigation(viewModelFactory: androidx.lifecycle.ViewModelProvider.Factory) {
+fun MainScreen() {
     val navController = rememberNavController()
 
-    val viewModel: RecipeViewModel = viewModel(factory = viewModelFactory)
+    val viewModel: RecipeViewModel = hiltViewModel()
 
-    NavHost(navController = navController, startDestination = Destinations.RECIPE_LIST_ROUTE) {
+    val navItems = listOf(Screen.Recipes, Screen.ShoppingList)
 
-        composable(Destinations.RECIPE_LIST_ROUTE) {
-            RecipeListScreen(navController = navController, viewModel = viewModel)
+    Scaffold(
+
+        bottomBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+            val currentRoute = navBackStackEntry?.destination?.route
+
+            if (currentRoute != Screen.Detail.route) {
+                NavigationBar(
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    val currentDestination = navBackStackEntry?.destination
+
+                    navItems.forEach { screen ->
+                        NavigationBarItem(
+                            icon = { Icon(screen.icon, contentDescription = screen.title) },
+                            label = { Text(screen.title) },
+
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+
+                                    launchSingleTop = true
+
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
         }
+    ) { padding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Recipes.route,
+            modifier = Modifier.padding(padding)
+        ) {
 
-        composable(Destinations.ADD_RECIPE_ROUTE) {
-            AddRecipeScreen(navController = navController, viewModel = viewModel)
-        }
+            composable(Screen.Recipes.route) {
+                RecipeListScreen(
+                    viewModel = viewModel,
+                    onNavigateToDetail = { recipeId ->
+                        navController.navigate(Screen.Detail.createRoute(recipeId))
+                    }
+                )
+            }
 
-        composable(
-            route = Destinations.RECIPE_DETAIL_ROUTE_WITH_ARG,
-            arguments = listOf(navArgument(Destinations.RECIPE_ID_KEY) { type = NavType.IntType })
-        ) { backStackEntry ->
-            val recipeId = backStackEntry.arguments?.getInt(Destinations.RECIPE_ID_KEY) ?: return@composable
-            RecipeDetailScreen(
-                navController = navController,
-                viewModel = viewModel,
-                recipeId = recipeId
-            )
+
+            composable(Screen.ShoppingList.route) {
+                ShoppingListScreen(viewModel = viewModel)
+            }
+
+
+            composable(
+                route = Screen.Detail.route,
+                arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: -1
+
+                RecipeDetailScreen(
+                    recipeId = recipeId,
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }
