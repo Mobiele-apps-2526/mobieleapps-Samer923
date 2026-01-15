@@ -1,4 +1,4 @@
-Wekelijks rapport
+ Wekelijks rapport
 
 Student(e):                                                       
 
@@ -38,6 +38,8 @@ Week 12 :De data-laag voor de boodschappenlijst opgezet: nieuwe map db, Shopping
 
 
 Week 13 :boodschappenlijst en alles met te maken heeft afgrond: uren: 14,30
+
+Week 14 :Dark Mode toegevoegd en structuur aangepast: uren: 5
 
 
 en volgende weken (15/12): ..... uren:
