@@ -1,9 +1,9 @@
-package com.example.receptenplanner.repository
+package com.example.receptenplanner.models.model.repository
 
 import com.example.receptenplanner.data.ShoppingListItem
 import kotlinx.coroutines.flow.Flow
 
-interface ShoppingListRepository {
+interface hoppingListRepository {
     fun getAllItems(): Flow<List<ShoppingListItem>>
     suspend fun insertItem(name: String)
     suspend fun updateItem(item: ShoppingListItem)

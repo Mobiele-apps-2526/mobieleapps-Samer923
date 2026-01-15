@@ -1,12 +1,15 @@
 package com.example.receptenplanner
 
 import android.os.Bundle
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.NightsStay
+import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,12 +26,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.receptenplanner.screen.ShoppingListScreen
-import com.example.receptenplanner.screen.recipes.RecipeDetailScreen
-import com.example.receptenplanner.screen.recipes.RecipeListScreen
+import com.example.receptenplanner.ui.theme.recipes.RecipeDetailScreen
+import com.example.receptenplanner.ui.theme.recipes.RecipeListScreen
 import com.example.receptenplanner.ui.theme.ReceptenplannerTheme
 import com.example.receptenplanner.viewmodel.RecipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
     object Recipes : Screen("recipes", "Recepten", Icons.Filled.MenuBook)
@@ -38,12 +40,14 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ReceptenplannerTheme {
-                MainScreen()
+            val viewModel: RecipeViewModel = hiltViewModel()
+            ReceptenplannerTheme(darkTheme = viewModel.isDarkMode) {
+                MainScreen(viewModel)
             }
         }
     }
@@ -51,18 +55,26 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: RecipeViewModel) {
     val navController = rememberNavController()
-
-    val viewModel: RecipeViewModel = hiltViewModel()
-
     val navItems = listOf(Screen.Recipes, Screen.ShoppingList)
 
     Scaffold(
-
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text("Receptenplanner") },
+                actions = {
+                    IconButton(onClick = { viewModel.toggleTheme() }) {
+                        Icon(
+                            imageVector = if (viewModel.isDarkMode) Icons.Default.WbSunny else Icons.Default.NightsStay,
+                            contentDescription = "Schakel Thema"
+                        )
+                    }
+                }
+            )
+        },
         bottomBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-
             val currentRoute = navBackStackEntry?.destination?.route
 
             if (currentRoute != Screen.Detail.route) {
@@ -70,22 +82,17 @@ fun MainScreen() {
                     modifier = Modifier.padding(horizontal = 8.dp)
                 ) {
                     val currentDestination = navBackStackEntry?.destination
-
                     navItems.forEach { screen ->
                         NavigationBarItem(
                             icon = { Icon(screen.icon, contentDescription = screen.title) },
                             label = { Text(screen.title) },
-
                             selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                             onClick = {
                                 navController.navigate(screen.route) {
-
                                     popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
                                     }
-
                                     launchSingleTop = true
-
                                     restoreState = true
                                 }
                             }
@@ -100,7 +107,6 @@ fun MainScreen() {
             startDestination = Screen.Recipes.route,
             modifier = Modifier.padding(padding)
         ) {
-
             composable(Screen.Recipes.route) {
                 RecipeListScreen(
                     viewModel = viewModel,
@@ -109,19 +115,14 @@ fun MainScreen() {
                     }
                 )
             }
-
-
             composable(Screen.ShoppingList.route) {
                 ShoppingListScreen(viewModel = viewModel)
             }
-
-
             composable(
                 route = Screen.Detail.route,
                 arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: -1
-
                 RecipeDetailScreen(
                     recipeId = recipeId,
                     viewModel = viewModel,

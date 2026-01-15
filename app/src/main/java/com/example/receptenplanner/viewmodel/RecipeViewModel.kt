@@ -5,9 +5,9 @@ package com.example.receptenplanner.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.receptenplanner.data.Recipe
-import com.example.receptenplanner.repository.RecipeRepository
-import com.example.receptenplanner.repository.ShoppingListRepository
+import com.example.receptenplanner.models.model.Recipe
+import com.example.receptenplanner.models.model.repository.RecipeRepository
+import com.example.receptenplanner.models.model.repository.ShoppingListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

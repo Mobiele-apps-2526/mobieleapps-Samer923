@@ -1,8 +1,8 @@
-package com.example.receptenplanner.repository
+package com.example.receptenplanner.data.repository
 
-import com.example.receptenplanner.data.ShoppingListDao
 import com.example.receptenplanner.data.ShoppingListItem
-import com.example.receptenplanner.repository.ShoppingListRepository
+import com.example.receptenplanner.data.local.ShoppingListDao
+import com.example.receptenplanner.models.model.repository.ShoppingListRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

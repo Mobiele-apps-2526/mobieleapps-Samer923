@@ -1,12 +1,13 @@
-package com.example.receptenplanner.data
-import androidx.room.Dao;
+package com.example.receptenplanner.data.local
+
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import androidx.room.Update
+import com.example.receptenplanner.models.model.Recipe
 import kotlinx.coroutines.flow.Flow
-
 
 @Dao
 interface RecipeDao {
@@ -16,14 +17,15 @@ interface RecipeDao {
     @Query("SELECT * FROM recipe WHERE id = :id")
     suspend fun getRecipeById(id: Int): Recipe?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
     suspend fun insert(recipe: Recipe)
 
 
     @Update
     suspend fun update(recipe: Recipe)
 
-    @Delete suspend fun delete(recipe: Recipe)
+    @Delete
+    suspend fun delete(recipe: Recipe)
 
 
 

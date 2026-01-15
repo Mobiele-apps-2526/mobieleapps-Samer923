@@ -1,4 +1,4 @@
-package com.example.receptenplanner.db
+package com.example.receptenplanner.data.local
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

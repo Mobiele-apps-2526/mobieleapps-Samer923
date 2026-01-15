@@ -1,4 +1,4 @@
-package com.example.receptenplanner.screen.recipes
+package com.example.receptenplanner.ui.theme.recipes
 
 
 
@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.receptenplanner.models.model.Recipe
 import com.example.receptenplanner.viewmodel.RecipeViewModel
 import kotlinx.coroutines.launch
 
@@ -123,9 +124,10 @@ fun RecipeDetailScreen(
                 onClick = {
                     if (title.isNotBlank() && ingredientsText.isNotBlank() && instructions.isNotBlank()) {
                         if (recipeId == -1) {
-                            val newRecipe = com.example.receptenplanner.data.Recipe(
+                            val newRecipe = Recipe(
                                 title = title,
-                                ingredients = ingredientsText.split('\n').map { it.trim() }.filter { it.isNotBlank() },
+                                ingredients = ingredientsText.split('\n').map { it.trim() }
+                                    .filter { it.isNotBlank() },
                                 instructions = instructions
                             )
                             viewModel.saveRecipe(newRecipe)

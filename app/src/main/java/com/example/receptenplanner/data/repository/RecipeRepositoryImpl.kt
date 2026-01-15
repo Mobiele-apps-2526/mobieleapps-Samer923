@@ -1,8 +1,9 @@
-package com.example.receptenplanner.repository
+package com.example.receptenplanner.data.repository
 
-import com.example.receptenplanner.data.Recipe
-import com.example.receptenplanner.data.RecipeDao
-import com.example.receptenplanner.model.ShoppingListItem
+import com.example.receptenplanner.models.model.Recipe
+import com.example.receptenplanner.data.local.RecipeDao
+import com.example.receptenplanner.models.model.ShoppingListItem
+import com.example.receptenplanner.models.model.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
 
 class RecipeRepositoryImpl(

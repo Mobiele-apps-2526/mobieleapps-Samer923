@@ -1,4 +1,4 @@
-package com.example.receptenplanner.model
+package com.example.receptenplanner.models.model
 
 import android.R
 

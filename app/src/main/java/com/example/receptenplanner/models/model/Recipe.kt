@@ -1,8 +1,7 @@
-package com.example.receptenplanner.data
+package com.example.receptenplanner.models.model
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
-
 
 @Entity(tableName = "recipe_table")
 data class Recipe(

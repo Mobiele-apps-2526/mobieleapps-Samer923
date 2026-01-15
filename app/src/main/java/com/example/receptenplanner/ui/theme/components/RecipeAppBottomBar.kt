@@ -1,4 +1,4 @@
-package com.example.receptenplanner.presentation
+package com.example.receptenplanner.ui.theme.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -8,6 +8,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.receptenplanner.ui.theme.components.Screen
 
 @Composable
 fun RecipeAppBottomBar(

@@ -1,9 +1,9 @@
 package com.example.receptenplanner.di
 
-import com.example.receptenplanner.repository.RecipeRepository
-import com.example.receptenplanner.repository.RecipeRepositoryImpl
-import com.example.receptenplanner.repository.ShoppingListRepository
-import com.example.receptenplanner.repository.ShoppingListRepositoryImpl
+import com.example.receptenplanner.models.model.repository.RecipeRepository
+import com.example.receptenplanner.data.repository.RecipeRepositoryImpl
+import com.example.receptenplanner.models.model.repository.ShoppingListRepository
+import com.example.receptenplanner.data.repository.ShoppingListRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

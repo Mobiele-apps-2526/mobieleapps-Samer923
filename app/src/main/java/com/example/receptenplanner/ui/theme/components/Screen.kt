@@ -1,4 +1,4 @@
-package com.example.receptenplanner.presentation
+package com.example.receptenplanner.ui.theme.components
 
 sealed class Screen(val route: String) {
     data object Recipes : Screen("recipes")

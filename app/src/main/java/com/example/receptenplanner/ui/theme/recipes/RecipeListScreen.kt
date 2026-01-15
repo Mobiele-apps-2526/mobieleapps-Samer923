@@ -1,4 +1,4 @@
-package com.example.receptenplanner.screen.recipes
+package com.example.receptenplanner.ui.theme.recipes
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,24 +13,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.receptenplanner.data.Recipe
+import com.example.receptenplanner.models.model.Recipe
 import com.example.receptenplanner.viewmodel.RecipeViewModel
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.receptenplanner.data.Recipe
-import com.example.receptenplanner.viewmodel.RecipeViewModel
+import androidx.compose.ui.Alignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,14 +60,14 @@ fun RecipeListScreen(
             if (recipes.isEmpty() && searchQuery.isBlank()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
+                    contentAlignment = Alignment.Center
                 ) {
                     Text("Geen recepten gevonden.")
                 }
             } else if (recipes.isEmpty() && searchQuery.isNotBlank()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
+                    contentAlignment = Alignment.Center
                 ) {
                     Text("Geen resultaten voor '${searchQuery}'")
                 }

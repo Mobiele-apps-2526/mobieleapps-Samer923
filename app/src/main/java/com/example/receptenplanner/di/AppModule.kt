@@ -2,9 +2,9 @@ package com.example.receptenplanner.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.receptenplanner.data.RecipeDao
-import com.example.receptenplanner.data.RecipeDatabase
-import com.example.receptenplanner.data.ShoppingListDao
+import com.example.receptenplanner.data.local.RecipeDao
+import com.example.receptenplanner.data.local.RecipeDatabase
+import com.example.receptenplanner.data.local.ShoppingListDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

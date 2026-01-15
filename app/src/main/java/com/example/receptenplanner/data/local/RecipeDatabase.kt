@@ -1,8 +1,12 @@
-package com.example.receptenplanner.data
-import android.content.Context;
-import androidx.room.Database;
+package com.example.receptenplanner.data.local
+
+import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.receptenplanner.data.ShoppingListItem
+import com.example.receptenplanner.models.model.Recipe
+
 @Database(
 
     entities = [Recipe::class, ShoppingListItem::class],

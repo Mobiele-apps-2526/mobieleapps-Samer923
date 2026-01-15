@@ -1,7 +1,7 @@
-package com.example.receptenplanner.repository
+package com.example.receptenplanner.models.model.repository
 
-import com.example.receptenplanner.data.Recipe
-import com.example.receptenplanner.model.ShoppingListItem
+import com.example.receptenplanner.models.model.Recipe
+import com.example.receptenplanner.models.model.ShoppingListItem
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
